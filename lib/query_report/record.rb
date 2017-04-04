@@ -46,11 +46,16 @@ module QueryReport
     end
 
     def map_record(query, render_from_view)
-      @columns = @columns.delete_if { |col| col.only_on_web? } unless render_from_view
+      #@columns = @columns.delete_if { |col| col.only_on_web? } unless render_from_view
 
       query.map do |record|
-        array = @columns.collect { |column| [column.humanize, sanitize_value(column.value(record), render_from_view)] }
+        array = @columns.collect { |column| 
+        
+          [column.humanize, sanitize_value(column.value(record), render_from_view)] 
+          
+        }
         Hash[*array.flatten]
+        
       end
     end
 
