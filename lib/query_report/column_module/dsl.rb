@@ -8,7 +8,8 @@ require 'query_report/column_module/column'
 module QueryReport
   module ColumnModule
     module DSL
-      attr_accessor :columns
+      attr_accessor :columns, :column_total_with_colspan
+      
 
       def initialize_columns
         @columns = []
@@ -67,7 +68,16 @@ module QueryReport
       #  column :invoice_date, pdf: {width: 20}
       # This is how you can control the width of the column in the pdf
       def column(name, options={}, &block)
+        options[:visible] = true
+        options[:only_on_web] = false
         @columns << Column.new(self, name, options, block)
+        
+        if options.has_key?(:column_data)
+          column_data = options[:column_data]
+          x = {visible: false, only_on_web: true}
+          @columns << Column.new(self, column_data, x, block)
+        end
+
       end
 
       # @return [Array<Hash>] the footer for the table with total with appropriate colspan and content
@@ -78,18 +88,20 @@ module QueryReport
         colspan = 0
         total_text_printed = false
         columns.each do |column|
-          if column.has_total?
-            if colspan > 0
-              title = total_text_printed ? '' : I18n.t('query_report.total')
-              total_with_colspan << (colspan == 1 ? {content: title} : {content: title, colspan: colspan})
+            if column.has_total?
+              if colspan > 0
+                title = total_text_printed ? '' : I18n.t('query_report.total')
+                total_with_colspan << (colspan == 1 ? {content: title} : {content: title, colspan: colspan})
+              end
+              total_with_colspan << {content: column.total, align: column.align}
+              total_text_printed = true
+              colspan = 0
+            else
+              if column.visible?
+                colspan += 1
+              end
             end
-            total_with_colspan << {content: column.total, align: column.align}
-            total_text_printed = true
-            colspan = 0
-          else
-            colspan += 1
           end
-        end
         if colspan > 0
           total_with_colspan << {content: '', colspan: colspan}
         end
