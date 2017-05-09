@@ -1,12 +1,16 @@
 <% if report.has_total? %>
     <tfoot>
     <tr>
-     
+     <% 
+     	p 'foooter'
+     %>
       <% report.column_total_with_colspan.each do |total_with_colspan| %>
-       <% p total_with_colspan %>
           <td colspan="<%= total_with_colspan[:colspan] %>" class="queryreport-td-align-right"><%= total_with_colspan[:content] %></td>
 
       <% end %>
     </tr>
     </tfoot>
-<% end %>
+
+<% else %>
+	<% p ' no hay total ' %>
+ <% end %>

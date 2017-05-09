@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
   s.test_files = Dir["test/**/*"]
 
   s.add_dependency 'railties','~> 5.0.0'
-  s.add_dependency 'ransack', ['>= 1.2', '< 2']
+  #s.add_dependency 'ransack', ['>= 1.2', '< 2']
   s.add_dependency 'rmagick', '~> 2.13'
   s.add_dependency 'gruff', '~> 0.5'
   s.add_dependency 'kaminari', '~> 0.16'

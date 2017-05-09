@@ -38,9 +38,12 @@ module QueryReport
       end
 
       def apply_filters(query, http_params)
+        p 'apply_filters'
         # apply default filter
         params = load_default_values_in_param(http_params) #need for ransack filter
+
         @search = query.ransack(params[:q])
+       
         query = @search.result
 
         #this is to fix a bug from ransack, as for ransack when the sorting is done from a joined table it does not sort by default
@@ -69,13 +72,19 @@ module QueryReport
         params = http_params.clone
         params = params.merge(q: {}) unless params[:q]
         params = params.merge(custom_search: {}) unless params[:custom_search]
+
         @filters.each do |filter|
           filter.comparators.each do |comparator|
             params[filter.params_key][comparator.search_key] ||= comparator.param_value
           end
         end
+
         params
+
       end
+
+
+
     end
   end
 end

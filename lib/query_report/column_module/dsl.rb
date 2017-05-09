@@ -70,25 +70,49 @@ module QueryReport
       def column(name, options={}, &block)
         options[:visible] = true
         options[:only_on_web] = false
-        @columns << Column.new(self, name, options, block)
-        
-        if options.has_key?(:column_data)
-          column_data = options[:column_data]
-          x = {visible: false, only_on_web: true}
-          @columns << Column.new(self, column_data, x, block)
-        end
-
+        @columns << Column.new(self, name, options, block)        
       end
 
       # @return [Array<Hash>] the footer for the table with total with appropriate colspan and content
       # Sample output
       #  [{content: "Total", colspan: '2'}, 200, 300]
       def column_total_with_colspan
+        p 'column_total_with_colspan'
+        column_rowspan = nil
         total_with_colspan = []
         colspan = 0
         total_text_printed = false
         columns.each do |column|
-            if column.has_total?
+          p 'grand_total?'
+           p column.has_grand_total?
+             if column.has_total? || column.has_grand_total?
+              if colspan > 0
+                title = total_text_printed ? '' : I18n.t('query_report.total')
+                total_with_colspan << (colspan == 1 ? {content: title} : {content: title, colspan: colspan})
+              end
+              total_with_colspan << {content: column.total(column), align: column.align}
+              total_text_printed = true
+              colspan = 0
+            else
+              if column.visible?
+                colspan += 1
+              end
+            end
+          end
+        if colspan > 0
+          total_with_colspan << {content: '', colspan: colspan}
+        end
+        total_with_colspan
+      end
+      def column_total_with_colspan2
+        p 'column_total_with_colspan'
+        total_with_colspan = []
+        colspan = 0
+        total_text_printed = false
+        columns.each do |column|
+          p 'grand_total?'
+           p column.has_grand_total?
+             if column.has_total? || column.has_grand_total?
               if colspan > 0
                 title = total_text_printed ? '' : I18n.t('query_report.total')
                 total_with_colspan << (colspan == 1 ? {content: title} : {content: title, colspan: colspan})
@@ -106,6 +130,68 @@ module QueryReport
           total_with_colspan << {content: '', colspan: colspan}
         end
         total_with_colspan
+      end
+      # @return [Array<Hash>] the footer for the table with total with appropriate colspan and content
+      # Sample output
+      #  [{content: "Total", colspan: '2'}, 200, 300]
+      def column_subtotal_with_colspan( value )
+
+        column_rowspan = nil
+        subtotal_with_colspan = []
+        colspan = 0
+        total_text_printed = false
+        columns.each do |column|           
+            if !column.rowspan?
+              if colspan > 0
+                title = total_text_printed ? '' : 'Sub Total '
+                subtotal_with_colspan << (colspan == 1 ? {content: title.to_s} : {content: title.to_s, colspan: colspan})
+              end
+              subtotal_with_colspan << {content: column.sub_total(column_rowspan,value,column).to_s, align: column.align}
+              total_text_printed = true
+              colspan = 0
+            else
+              column_rowspan = column
+              colspan += 1
+            end
+        end
+
+        if colspan > 0
+          subtotal_with_colspan << {content: '', colspan: colspan}
+        end
+       
+        subtotal_with_colspan
+      end
+
+      def column_subtotal_with_colspan2( value )
+       # p value
+        #p 'column_subtotal_with_colspan in dsl'
+        subtotal_with_colspan = []
+        colspan = 0
+        total_text_printed = false
+        columns.each do |column|
+           
+            if !column.rowspan?
+              # p 'has_subtotal ' + column.has_subtotal?.to_s
+              if colspan > 0
+                title = total_text_printed ? '' : 'Sub Total '
+                subtotal_with_colspan << (colspan == 1 ? {content: title.to_s} : {content: title.to_s, colspan: colspan})
+              end
+              #p value[:index_f].to_s + ' - ' + value[:index_t].to_s
+              subtotal_with_colspan << {content: column.sub_total2(value[:index_f], value[:index_t]).to_s, align: column.align}
+              #p ' entro aca '
+               #p '1 ' + subtotal_with_colspan.to_s
+              total_text_printed = true
+              colspan = 0
+            else
+             # if column.visible?
+                colspan += 1
+              #end
+            end
+        end
+        if colspan > 0
+          subtotal_with_colspan << {content: '', colspan: colspan}
+        end       
+        subtotal_with_colspan
       end
     end
   end

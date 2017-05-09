@@ -8,17 +8,10 @@ module QueryReport
     class Column
       include ActionView::Helpers::SanitizeHelper
 
-      attr_reader :report, :name, :column_data, :options, :type, :data
+      attr_reader :report, :name, :options, :type, :data
 
       def initialize(report, column_name, options={}, block = nil)
         @report, @name,  @options = report, column_name, options
-        p options
-        if options.has_key?(:column_data)
-          @column_data = options[:column_data]
-        else
-          @column_data = @name
-        end
-        
         @data = block || @name.to_sym
         
          
@@ -42,7 +35,7 @@ module QueryReport
         @name
       end   
       def visible?
-        @options[:visible]
+        @options[:visible].present? && @options[:visible] != false
       end
       
       def sort_link_attribute
@@ -70,6 +63,19 @@ module QueryReport
         @rowspan_column_humanized = self.humanize
       end
 
+      def subtotal_column_humanized
+        return @subtotal_column_humanized if @subtotal_column_humanized
+        rowspan_column_name = @options[:show_subtotal].kind_of?(Symbol) ? @options[:show_subtotal] : self.name
+
+        report.columns.each do |column|
+          if column.name == rowspan_column_name
+            @rowspan_column_name = column.humanize
+            return @rowspan_column_name
+          end
+        end
+        @rowspan_column_name = self.humanize
+      end
+
       def humanize
         @humanize ||= options[:as] || begin
           @report.model_class.human_attribute_name(name) if @report.model_class && !@report.array_record?
@@ -79,62 +85,119 @@ module QueryReport
       def value(record)
         self.data.kind_of?(Symbol) ? (record.respond_to?(self.name) ? record.send(self.name) : record[self.name]) : self.data.call(record)
       end
-      def has_column_data?
-        @options[:column_data].present? && @options[:column_data] != false
+      def has_type?
+         @options[:type].present? && @options[:type] != false
+      end
+      def get_type
+        has_type? ? @options[:type] : false
       end
       def has_total?
         @options[:show_total].present? && @options[:show_total] != false
       end
-
+      def has_grand_total?
+        @options[:show_grand_total].present? && @options[:show_grand_total] != false
+      end
+      def has_subtotal?
+        @options[:show_subtotal].present? && @options[:show_subtotal] != false
+      end
       def align
         @options[:align] || (has_total? ? :right : :left)
       end
-      def total
-        @total ||= begin
-      	 if has_total? 
-      	   
-        	 	if @options[:show_grand_total]
-  	        	report.records_without_pagination.inject(0) do |sum, r|
-  	        	  
-          		    	if !@options[:column_data] && @options.visible?
-          		    	  r = report.content_from_element(r[humanize])
-                    else
-                      r = report.content_from_element(r[ @report.model_class.human_attribute_name(@column_data) ])
-          		    	end
-  			            r = strip_tags(r) if r.kind_of? String
-  			            
-                		sum + r.to_f
-  			      end
-  			      
-        		else
-        
-          		report.records_to_render.inject(0) do |sum, r|
-            			r = report.content_from_element(r[humanize])
-            			r = strip_tags(r) if r.kind_of? String
-            			sum + r.to_f
-          		end
 
-        		end
+      def total(column)
+        if has_subtotal?
+          p report.query.sum(column.name.to_sym).class
+          return report.query.sum(column.name.to_sym).pretty_type get_type
+        else 
+          return nil
+        end  
+      end
+     
+
+      def sub_total(key,value,column)
+        p 'get_type : ' + get_type.to_s
+        @type_total = 'i'
+        @sub_total  = 0
+        if has_subtotal?
+          p report.filtered_query.where(key.name => value ).sum(column.name.to_sym).class
+          return report.filtered_query.where(key.name => value ).sum(column.name.to_sym).pretty_type get_type
+        else 
+          return nil
+        end          
+      end
+
+      def sub_total2(from, to)
+
+        @type_total = 'i'
+        @sub_total  = 0
+
+        report.records_without_pagination.values_at(from..to).inject(0) do |sum, r|
+          if ( (r[humanize].to_s.include? ":")  )
+            @type_total = 'h'
+            r = duration_in_seconds(r[humanize].to_s)
+            @sub_total = @sub_total + r.to_i
           else
-            nil
+            @sub_total = @sub_total + r[humanize].to_i
           end
         end
+
+
+        if @type_total == 'i'
+          @sub_total
+        elsif @type_total == 'h'
+          @sub_total = @sub_total.pretty_duration            
+        else
+          'nada'
+        end
+
       end
-      # def total
-      #   @total ||= begin
-      #     if has_total?
-      #       sum = 0
-      #       report.records_to_render.each do |r|
-      #         r = report.content_from_element(r[humanize])
-      #         r = strip_tags(r) if r.kind_of? String
-      #         sum = sum + r.to_f
-      #       end
-      #       sum.kind_of?(Float) ? sum.round(2) : sum
-      #     else
-      #       nil
-      #     end
-      #   end
-      # end
+ def total2
+
+          @type_total = 'i'
+          @total = 0
+
+          if has_total?
+             p 'has_total?'
+              report.records_to_render.inject(0) do |sum, r|
+                  if ( (r[humanize].to_s.include? ":") || ( r[humanize].to_s.include? "/" ) || (r[humanize].to_s.include? "-") )
+                    @type_total = 'h'
+                    r = report.content_from_element(duration_in_seconds(r[humanize].to_s))
+                  else 
+                    r = report.content_from_element(r[humanize])
+                  end
+                  sum + r.to_f
+                  @total = @total + r.to_f
+              end
+          end
+          if has_grand_total?
+            p 'has_grand_total?'
+              report.records_without_pagination.inject(0) do |sum, r|               
+                if ( (r[humanize].to_s.include? ":") || ( (r[humanize].to_s.include? "/")  ))
+                    @type_total = 'h'
+                    p 'calculate houres'
+                    p r[humanize].to_s
+                    r = report.content_from_element(duration_in_seconds(r[humanize].to_s))
+                    @total = @total + r.to_f
+                else
+                    r = report.content_from_element(r[humanize])
+                    r = strip_tags(r) if r.kind_of? String
+                    @total = @total + r.to_f
+                end
+              end
+          end
+
+          if @type_total == 'i'
+              @total
+          elsif @type_total == 'h'
+              @total = @total.pretty_duration
+          end
+      end
+
+      def duration_in_seconds(input)
+        h, m, s = input.split(':').map(&:to_i)
+        (h.hours.to_i + m.minutes.to_i + s.seconds.to_i)
+      end
+
     end
   end
 end
