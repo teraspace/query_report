@@ -1,38 +1,85 @@
 <% if report.records.size > 0 %>
-    <table class="<%= QueryReport.config.record_table_class %>" cellpadding="0" cellspacing="0">
-      <thead>
-      <% report.columns.each do |column| %>
-        <% if column.visible?  %>
-          <th >
-              <%= 
-                  column.sortable? ? sort_link(report.search, column.sort_link_attribute, column.humanize, params, remote: @remote) : column.humanize 
-              %>
-         </th>
-         <% end %>
+<table class="<%= QueryReport.config.record_table_class %>" cellpadding="0" cellspacing="0">
+  <thead>
+    <% report.columns.each do |column| %>
+      <% if column.visible?  %>
+        <th >
+          <%= 
+          column.sortable? ? sort_link(report.search, column.sort_link_attribute, column.humanize, params, remote: @remote) : column.humanize 
+          %>
+      </th>
       <% end %>
-      </thead>
+    <% end %>
+  </thead>
 
-      <tbody>
-      <% report.records_to_render.each do |record| %>
-          <tr>
+  <tbody>
+
+  <%  before_value, value, idx,rowspan_value = nil,nil, 0, nil %>
+  <% report.records_to_render.each_with_index do |record, index| %>
+
+      <tr>
             <% report.columns.each do |column| %>
-             <% if column.visible? %>
-                    <% value = record[column.humanize]
-                       align = column.align
-                       align_attr = align ? "class=queryreport-td-align-#{align.to_s}" : ''
+
+                <% if column.visible? %>
+                    <% 
+                      value = record[column.humanize]
+                      align = column.align
+                      align_attr = align ? "class=queryreport-td-align-#{align.to_s}" : ''
                     %>
+
                     <% if value.kind_of?(Hash) %>
-                        <td rowspan="<%= value[:rowspan] %>" <%= align_attr %> ><%= value[:content] %></td>
+                    <% rowspan_value = value[:content] %>
+                        <td rowspan="<%= value[:rowspan] %>" <%= align_attr %> ><%= value[:content].pretty_type(column.get_type) %></td>
                     <% elsif record.has_key?(column.humanize) %>
-                        <td <%= align_attr %>><%= value %></td>
+                        <td <%= align_attr %>><%= value.pretty_type(column.get_type) %></td>
                     <% end %>
+
                 <% end %>
+
             <% end %>
-          </tr>
-      <% end %>
-      <%= render :partial => "query_report/record_footer", locals: {report: report} %>
-      </tbody>
-    </table>
+
+      </tr>
+      <%
+      #Solo cuando el index es igual al ultimo indice del subgrupo se agrega el sub-total
+      #p '++++++++++++++++++++++++++++++++++++++++++ before_value ++++++++++++++++++++++++++++++'
+       #p before_value
+      if before_value!= nil and before_value[:index_t] == index
+              %>
+
+              <% report.column_subtotal_with_colspan(rowspan_value).each do |total_with_colspan| %>
+                  <td colspan="<%= total_with_colspan[:colspan] %>" class="queryreport-td-align-right"><%= total_with_colspan[:content] %></td>
+
+              <% end %>        
+           <%
+  
+          #Agregamos total sólo para el valor anterior pues el siguiente ya es información de la sgte agrupación
+          before_value = nil
+          value = nil
+      end
+
+      %>
+
+      <%  
+      #Se recorren las columnas para obtener el valor que contiene la información del la Agrupación
+      report.columns.each do |column| 
+          value = record[column.humanize]
+          #Si continene información de agrupacion
+          if value.kind_of?(Hash) 
+            before_value = value
+          end
+      end
+
+     %>
+  <%  idx=+1 
+
+  #p index
+   %> 
+  <% end %>
+
+  <%= render :partial => "query_report/record_footer", locals: {report: report} %>
+
+  </tbody>
+</table>
 <% else %>
-    <p><%= t('query_report.no_record_found') %></p>
+<p><%= t('query_report.no_record_found') %></p>
 <% end %>

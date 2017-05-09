@@ -2,7 +2,7 @@
   <% report.charts.each_with_index do |chart, i| %>
       <% chart_id = "chart#{i}" %>
       <div class="span6">
-        <div id="<%= chart_id %>" style="text-align: center;"></div>
+        <div id="<%= chart_id %>" style="text-align: center; width: 1024px"></div>
       </div>
       <%= chart.render_chart(chart_id) %>
   <% end %>

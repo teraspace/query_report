@@ -13,7 +13,8 @@ module QueryReport
     end
 
     def chart(chart_type, chart_title, &block)
-      chart_adapter = ChartAdapter.new(filtered_query, records_without_pagination, chart_type, chart_title)
+      apply.clone
+      chart_adapter = ChartAdapter.new(query, records_without_pagination, chart_type, chart_title)
       block.call(chart_adapter)
       @charts << chart_adapter.chart
     end
@@ -33,6 +34,10 @@ module QueryReport
 
       def sum_with(options)
         @chart.data = []
+
+        if query.class==NilClass
+          return
+        end
         options.each do |column_title, column|
           @chart.data << [column_title, query.sum(column)]
         end

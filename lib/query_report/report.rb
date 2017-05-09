@@ -39,9 +39,11 @@ module QueryReport
     end
 
     def has_total?
-      @columns.any?(&:has_total?)
+      @columns.any?(&:has_total?) ||  @columns.any?(&:has_grand_total?)
     end
-
+    def has_subtotal?
+      @columns.any?(&:has_subtotal?)
+    end
     def paginate?
       return false if array_record? #do not paginate on the array records
       return true if @options[:paginate].nil?
