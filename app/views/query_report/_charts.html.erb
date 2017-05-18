@@ -1,4 +1,4 @@
-<% if report.has_chart? and report.enable_chart? and report.chart_on_web? %>
+<% if !report.has_chart? and report.enable_chart? and report.chart_on_web? %>
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <%= render :partial => "query_report/chart", locals: {report: report} %>
 <% else %>

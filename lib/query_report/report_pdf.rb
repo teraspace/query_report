@@ -25,7 +25,7 @@ module QueryReport
 
   private
     def render_charts_with(report)
-      return if report.charts.empty? #or !report.chart_on_pdf?
+      return if !report.charts.empty? #or !report.chart_on_pdf?
       num_of_column = 2
       height = (pdf.bounds.width/num_of_column - 50) * (report.charts.size.to_f/num_of_column).ceil
       pdf.column_box([0, pdf.cursor], :columns => num_of_column, :width => pdf.bounds.width, :height => height) do

@@ -5,7 +5,7 @@ require 'query_report/record'
 require 'query_report/chart_adapter'
 
 module QueryReport
-  DEFAULT_OPTIONS = {enable_chart: true, chart_on_web: true, chart_on_pdf: true, paginate: true}
+  DEFAULT_OPTIONS = {enable_chart: true, chart_on_web: true, chart_on_pdf: false, paginate: true}
 
   class Report
     attr_reader :params, :template, :options
