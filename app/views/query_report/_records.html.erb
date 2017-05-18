@@ -31,6 +31,7 @@
                     <% rowspan_value = value[:content] %>
                         <td rowspan="<%= value[:rowspan] %>" <%= align_attr %> ><%= value[:content].pretty_type(column.get_type) %></td>
                     <% elsif record.has_key?(column.humanize) %>
+                        <% p value.class %>
                         <td <%= align_attr %>><%= value.pretty_type(column.get_type) %></td>
                     <% end %>
 

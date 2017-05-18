@@ -16,6 +16,7 @@ module QueryReport
       apply.clone
       chart_adapter = ChartAdapter.new(query, records_without_pagination, chart_type, chart_title)
       block.call(chart_adapter)
+      return if chart_type == nil || chart_title == nil
       @charts << chart_adapter.chart
     end
 

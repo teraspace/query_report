@@ -3,7 +3,9 @@ module QueryReportEngineLinkHelper
     if respond_to? :link_to_download_report_pdf
       link_to_download_report_pdf
     else
-      link_to t('views.links.pdf'), export_report_url_with_format('pdf'), :target => "_blank"
+      link_to  export_report_url_with_format('pdf'), :target => "_blank" do
+        '<i class="material-icons" style="color: rgba(0, 0, 0, 0.54);">picture_as_pdf</i>'.html_safe
+      end
     end
   end
 
@@ -11,7 +13,9 @@ module QueryReportEngineLinkHelper
     if respond_to? :link_to_download_report_csv
       link_to_download_report_csv
     else
-      link_to t('views.links.csv'), export_report_url_with_format('csv'), :target => "_blank"
+      link_to  export_report_url_with_format('csv'), :target => "_blank" do
+        '<i class="material-icons" style="color: rgba(0, 0, 0, 0.54);">file_download</i>'.html_safe
+      end
     end
   end
 
@@ -20,7 +24,11 @@ module QueryReportEngineLinkHelper
       respond_to = nil
       link_to_email_query_report(target_dom_id)
     else
-      link_to t('views.labels.email'), 'javascript:void(0)', :onclick => "ReportEmailPopup.openEmailModal('#{target_dom_id}');" if QueryReport.config.allow_email_report
+      if QueryReport.config.allow_email_report
+        link_to  'javascript:void(0)', :onclick => "ReportEmailPopup.openEmailModal('#{target_dom_id}');" do
+        '<i class="material-icons" style="color: rgba(0, 0, 0, 0.54);">email</i>'.html_safe
+      end
+      end
     end
   end
 end

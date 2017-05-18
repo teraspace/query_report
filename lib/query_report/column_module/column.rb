@@ -88,8 +88,14 @@ module QueryReport
       def has_type?
          @options[:type].present? && @options[:type] != false
       end
+      def has_total_type?
+         @options[:total_type].present? && @options[:total_type] != false
+      end
       def get_type
         has_type? ? @options[:type] : false
+      end
+      def get_total_type
+        has_type? ? @options[:total_type] : false
       end
       def has_total?
         @options[:show_total].present? && @options[:show_total] != false
@@ -106,8 +112,7 @@ module QueryReport
 
       def total(column)
         if has_subtotal?
-          p report.query.sum(column.name.to_sym).class
-          return report.query.sum(column.name.to_sym).pretty_type get_type
+          return report.query.sum(column.name.to_sym).pretty_type get_total_type
         else 
           return nil
         end  
@@ -120,7 +125,7 @@ module QueryReport
         @sub_total  = 0
         if has_subtotal?
           p report.filtered_query.where(key.name => value ).sum(column.name.to_sym).class
-          return report.filtered_query.where(key.name => value ).sum(column.name.to_sym).pretty_type get_type
+          return report.filtered_query.where(key.name => value ).sum(column.name.to_sym).pretty_type get_total_type
         else 
           return nil
         end          

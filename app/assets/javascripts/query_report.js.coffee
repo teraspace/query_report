@@ -7,3 +7,5 @@ class @QueryReport
     searchForm.find("#message").val(message)
     searchForm.submit()
     searchForm.find("#send_as_email").val(0)
+    
+    
