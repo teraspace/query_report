@@ -35,7 +35,8 @@ module QueryReport
     # [{'Name' => 'Ashraf', 'Email' => 'test@jitu.email'},
     #  {'Name' => 'Razeen', 'Email' => 'test@razeen.email'}]
     def records
-      record_to_map = array_record? ? query : filtered_paginated_query
+      apply
+      record_to_map = array_record? ? query.clone : filtered_paginated_query
       @records ||= map_record(record_to_map, true)
     end
 
@@ -81,9 +82,7 @@ module QueryReport
       last_reset_index = @columns.select(&:rowspan?).inject({}) { |hash, column| hash[column.humanize] = 0; hash }
       rowspan_column_hash = @columns.select(&:rowspan?).inject({}) { |hash, column| hash[column.humanize] = column.rowspan_column_humanized; hash }
       subtotal_column_hash = @columns.select(&:has_subtotal?).inject({}) { |hash, column| hash[column.humanize] = column.subtotal_column_humanized; hash }
-     # p subtotal_column_hash
       prev_row = {}
-      #p recs.as_json
       recs.each_with_index do |row, index|
         
         last_reset_index.each do |col, last_index|
@@ -96,12 +95,9 @@ module QueryReport
           prev_content = content_from_element(prev_row[col])
 
           if index == 0 || rowspan_content != prev_rowspan_content || content != prev_content
-          #  p ' siempre entra aca '
             last_reset_index[col] = index
-            #initialize
             row[col] = {content: content, rowspan: 1, sub_total: true, index_f: index, index_t: 0}
           elsif rowspan_content == prev_rowspan_content
-           # p ' no entra aca '
             recs[last_index][col][:rowspan] += 1
             recs[last_index][col][:index_t]  = index
           end
