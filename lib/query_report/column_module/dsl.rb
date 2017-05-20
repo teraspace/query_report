@@ -83,8 +83,6 @@ module QueryReport
         colspan = 0
         total_text_printed = false
         columns.each do |column|
-          p 'grand_total?'
-           p column.has_grand_total?
              if column.has_total? || column.has_grand_total?
               if colspan > 0
                 title = total_text_printed ? '' : I18n.t('query_report.total')
@@ -143,7 +141,7 @@ module QueryReport
         columns.each do |column|           
             if !column.rowspan?
               if colspan > 0
-                title = total_text_printed ? '' : 'Sub Total '
+                title = total_text_printed ? '' : I18n.t('query_report.sub_total')
                 subtotal_with_colspan << (colspan == 1 ? {content: title.to_s} : {content: title.to_s, colspan: colspan})
               end
               subtotal_with_colspan << {content: column.sub_total(column_rowspan,value,column).to_s, align: column.align}
@@ -173,7 +171,7 @@ module QueryReport
             if !column.rowspan?
               # p 'has_subtotal ' + column.has_subtotal?.to_s
               if colspan > 0
-                title = total_text_printed ? '' : 'Sub Total '
+                title = total_text_printed ? '' : I18n.t('query_report.sub_total')
                 subtotal_with_colspan << (colspan == 1 ? {content: title.to_s} : {content: title.to_s, colspan: colspan})
               end
               #p value[:index_f].to_s + ' - ' + value[:index_t].to_s

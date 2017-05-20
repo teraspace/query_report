@@ -120,11 +120,9 @@ module QueryReport
      
 
       def sub_total(key,value,column)
-        p 'get_type : ' + get_type.to_s
         @type_total = 'i'
         @sub_total  = 0
         if has_subtotal?
-          p report.filtered_query.where(key.name => value ).sum(column.name.to_sym).class
           return report.filtered_query.where(key.name => value ).sum(column.name.to_sym).pretty_type get_total_type
         else 
           return nil
