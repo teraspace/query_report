@@ -41,6 +41,7 @@ module QueryReport
     end
 
     def records_without_pagination
+    apply
       record_to_map = array_record? ? query.clone : filtered_query
       @records_without_pagination ||= map_record(record_to_map, false)
     end

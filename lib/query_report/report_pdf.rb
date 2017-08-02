@@ -77,15 +77,11 @@ module QueryReport
 
           if item[column].kind_of? Hash
             if item[column].has_key? :content 
-              p 'columna agrupa'
               @@value = item[column][:content]
               @@key_total = column
             else
               @@key = column
             end
-            p 'key: ' + @@key.to_s
-            p 'value: ' + @@value.to_s
-            p 'key_total: ' + @@key_total.to_s
             if item[column].has_key? :index_t  
               @@range = item[column][:index_t].to_i    
               report.column_subtotal_with_colspan(@@value).collect do |total|
@@ -110,12 +106,10 @@ module QueryReport
       items << item_values
 
       if @@range == idx
-        p ' adding subtotal '
         items << item_subtotal
         item_subtotal = []
       end
 
-       # p item_values.as_json.to_s + ' - ' + idx.to_s + ' - ' + @range.to_s
      end 
 
 
@@ -144,11 +138,6 @@ module QueryReport
          if item.has_key? column
 
           if item[column].kind_of? Hash
-            if item[column].has_key? :content 
-              p 'columna agrupa'
-              p item[column]
-              p column
-            end
             if item[column].has_key? :index_t  
               @@range = item[column][:index_t].to_i    
               report.column_subtotal_with_colspan2(item[column]).collect do |total|
@@ -171,7 +160,6 @@ module QueryReport
       items << item_values
 
       if @@range == idx
-        p ' adding subtotal '
         items << item_subtotal
         item_subtotal = []
       end
@@ -205,22 +193,20 @@ module QueryReport
           content.delete(:sub_total) 
           content.delete(:index_t) 
           content.delete(:index_f)
-            #p 'calcular subtotal'
           end
 
         else
           content = {content: fix_content(content), align: alignment_hash[column]}
         end
     end
-      # p content
       content
   end
 
   def render_table_with(report)
+    @pdf.text @report.options[:title], :size => 20, :style => :bold
     items = [humanized_table_header]
 
     items += table_content_for(report)
-    #p items.to_json
     render_table(items)
   end
 
