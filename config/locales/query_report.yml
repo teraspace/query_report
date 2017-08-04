@@ -8,3 +8,8 @@ en:
     labels:
       search: Search
     no_record_found: No record found
+# es.views.pagination.truncate
+es:
+  views:
+    pagination:
+      truncate: '...'
