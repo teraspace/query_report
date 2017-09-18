@@ -82,5 +82,21 @@
   </tbody>
 </table>
 <% else %>
-<p><%= t('query_report.no_record_found') %></p>
+<div style="position: relative; display: block; text-align: center;margin: 0 auto;">
+
+  
+  <div style="width: 64px; height: 64px; text-align: center;margin: 0 auto;">
+         <i class="material-icons" style=" color: #FFF; 
+                                            font-size: 28px; 
+                                            line-height: 64px; 
+                                            background-color: #2196f3; 
+                                            border-radius: 50%;
+                                            width: 100%;
+                                            ">mood_bad</i>
+  </div>
+<h3><%= t('query_report.no_record_found').upcase %></h3>
+
+  
+
+</div>
 <% end %>
