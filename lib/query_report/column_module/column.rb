@@ -25,7 +25,11 @@ module QueryReport
       end
 
       def only_on_web?
-        @options[:only_on_web] == true
+        if !@options[:only_on_web].present?
+          false
+        else
+          @options[:only_on_web]
+        end
       end
 
       def sortable?
@@ -35,7 +39,11 @@ module QueryReport
         @name
       end   
       def visible?
-        @options[:visible].present? && @options[:visible] != false
+         if !@options[:visible].present?
+          true
+        else
+          @options[:visible]
+        end
       end
       
       def sort_link_attribute
@@ -160,7 +168,6 @@ module QueryReport
           @total = 0
 
           if has_total?
-             p 'has_total?'
               report.records_to_render.inject(0) do |sum, r|
                   if ( (r[humanize].to_s.include? ":") || ( r[humanize].to_s.include? "/" ) || (r[humanize].to_s.include? "-") )
                     @type_total = 'h'
@@ -173,12 +180,9 @@ module QueryReport
               end
           end
           if has_grand_total?
-            p 'has_grand_total?'
               report.records_without_pagination.inject(0) do |sum, r|               
                 if ( (r[humanize].to_s.include? ":") || ( (r[humanize].to_s.include? "/")  ))
                     @type_total = 'h'
-                    p 'calculate houres'
-                    p r[humanize].to_s
                     r = report.content_from_element(duration_in_seconds(r[humanize].to_s))
                     @total = @total + r.to_f
                 else

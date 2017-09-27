@@ -19,7 +19,7 @@
 
       <tr>
             <% report.columns.each do |column| %>
-
+                    <% p column.name.to_s + ' - ' +  column.only_on_web?.to_s  %>
                 <% if column.visible? %>
                     <% 
                       value = record[column.humanize]
@@ -28,10 +28,9 @@
                     %>
 
                     <% if value.kind_of?(Hash) %>
-                    <% rowspan_value = value[:content] %>
+                        <% rowspan_value = value[:content] %>
                         <td rowspan="<%= value[:rowspan] %>" <%= align_attr %> ><%= value[:content].pretty_type(column.get_type) %></td>
                     <% elsif record.has_key?(column.humanize) %>
-                        <% p value.class %>
                         <td <%= align_attr %>><%= value.pretty_type(column.get_type) %></td>
                     <% end %>
 

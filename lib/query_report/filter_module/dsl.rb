@@ -38,7 +38,6 @@ module QueryReport
       end
 
       def apply_filters(query, http_params)
-        p 'apply_filters'
         # apply default filter
         params = load_default_values_in_param(http_params) #need for ransack filter
 
