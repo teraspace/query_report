@@ -19,6 +19,17 @@ module QueryReportEngineLinkHelper
     end
   end
 
+  def link_to_default_download_report_xls
+    if respond_to? :link_to_download_report_xls
+      link_to_download_report_xls
+    else
+      link_to  export_report_url_with_format('xlsx'), :target => "_blank" do
+        '<i class="material-icons" style="color: rgba(0, 0, 0, 0.54);">view_module</i>'.html_safe
+      end
+    end
+  end
+
+
   def link_to_default_email_query_report(target_dom_id)
     if respond_to? :link_to_email_query_report
       respond_to = nil

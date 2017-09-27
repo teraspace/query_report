@@ -68,8 +68,6 @@ module QueryReport
       #  column :invoice_date, pdf: {width: 20}
       # This is how you can control the width of the column in the pdf
       def column(name, options={}, &block)
-        options[:visible] = true
-        options[:only_on_web] = false
         @columns << Column.new(self, name, options, block)        
       end
 
@@ -109,7 +107,6 @@ module QueryReport
         total_text_printed = false
         columns.each do |column|
           p 'grand_total?'
-           p column.has_grand_total?
              if column.has_total? || column.has_grand_total?
               if colspan > 0
                 title = total_text_printed ? '' : I18n.t('query_report.total')

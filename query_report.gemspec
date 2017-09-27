@@ -26,7 +26,11 @@ Gem::Specification.new do |s|
   s.add_dependency 'prawn-table', '~> 0.1'
   s.add_dependency "rack", ">= 1.2"
   s.add_dependency "actionpack", '>= 3'
-
+  s.add_dependency "axlsx_rails"
+  s.add_dependency "axlsx"
+  s.add_dependency "acts_as_xlsx"
+  s.add_dependency "to_xls-rails"
+  s.add_dependency "spreadsheet"
   s.add_development_dependency 'rake', ['~> 10.3']
   s.add_development_dependency 'rspec', ['~> 3']
   s.add_development_dependency 'rspec-rails', ['~> 3']

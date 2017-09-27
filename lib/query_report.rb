@@ -28,5 +28,6 @@ module QueryReport
     config.record_table_class  = 'table table-bordered table-striped'
     config.search_button_class = 'btn btn-blue'
     config.search_form_options = {class: 'form-inline'}
+
   end
 end
