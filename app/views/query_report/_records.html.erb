@@ -19,7 +19,6 @@
 
       <tr>
             <% report.columns.each do |column| %>
-                    <% p column.name.to_s + ' - ' +  column.only_on_web?.to_s  %>
                 <% if column.visible? %>
                     <% 
                       value = record[column.humanize]

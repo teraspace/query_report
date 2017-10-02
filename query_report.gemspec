@@ -31,10 +31,13 @@ Gem::Specification.new do |s|
   s.add_dependency "acts_as_xlsx"
   s.add_dependency "to_xls-rails"
   s.add_dependency "spreadsheet"
+  s.add_dependency 'jbuilder'
+  s.add_dependency 'json'
   s.add_development_dependency 'rake', ['~> 10.3']
   s.add_development_dependency 'rspec', ['~> 3']
   s.add_development_dependency 'rspec-rails', ['~> 3']
   s.add_development_dependency 'rspec-mocks', '~> 3'
   s.add_development_dependency 'sqlite3', '~> 1.3'
   s.add_development_dependency 'database_cleaner', ['~> 1.2']
+
 end

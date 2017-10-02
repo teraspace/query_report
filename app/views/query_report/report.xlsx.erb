@@ -38,7 +38,7 @@
 
 	#Setea las Cabeceras por columnas 
 	column_headers = Array.new
-	p @csv.columns.as_json
+
 
 	@csv.columns.each_with_index do |column, index|
 		if column.visible? && !column.only_on_web?
