@@ -9,7 +9,7 @@ require 'query_report/report_pdf'
 require 'query_report/report_xlsx'
 
 module QueryReport
-module Helper
+  module Helper
     @csv = nil
     # Generates the reports
     # @param query The base query that the reporter with start with [filters will be applied on it]
@@ -30,26 +30,21 @@ module Helper
       end
 
       @remote = false
-
       respond_to do |format|
-        if options[:custom_view]
-          format.js do
-            @remote = true
-          end
-          format.html
-        else
-          format.js do
-            @remote = true
-            render 'query_report/list'
-          end
+
+        if !options[:custom_view]
+
           format.html { render('query_report/list') }
+         
         end
-                
-        format.json { render json: @report.records_without_pagination }
+
+        format.json { 
+          render('query_report/report')
+         }
         format.csv { send_data generate_csv_for_report(@report.records_without_pagination), :disposition => "attachment;" }
         format.xlsx { 
           send_data xlsx_for_report(options).string.bytes.to_a.pack("C*"), :type => 'application/excel', :disposition => "attachment;", :filename => @outfile
-         }
+        }
         format.pdf { send_data pdf_for_report(options), :type => 'application/pdf', :disposition => 'inline' }
       end
 
@@ -103,15 +98,15 @@ module Helper
         p 'record_size'
         columns = records.first.keys
         @@columns = columns
-         CSV.generate do |csv|
+        CSV.generate do |csv|
           csv << columns
           records.each do |record|
             csv << record.values.collect { |val| val.kind_of?(String) ? view_context.strip_links(val) : val }          
           end
-           
+
         end
 
-      
+
 
       else
         nil

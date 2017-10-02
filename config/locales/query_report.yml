@@ -13,3 +13,7 @@ es:
   views:
     pagination:
       truncate: '...'
+      next: 'Próximo'
+      previous: 'Anterior'
+      last: 'Último'
+      first: 'Primero'
