@@ -42,7 +42,7 @@ module QueryReport
           render('query_report/report')
          }
         format.csv { send_data generate_csv_for_report(@report.records_without_pagination), :disposition => "attachment;" }
-        format.xlsx { 
+        format.xls { 
           send_data xlsx_for_report(options).string.bytes.to_a.pack("C*"), :type => 'application/excel', :disposition => "attachment;", :filename => @outfile
         }
         format.pdf { send_data pdf_for_report(options), :type => 'application/pdf', :disposition => 'inline' }
