@@ -1,6 +1,8 @@
 <% uuid = Time.now.to_i
    @target_dom_id = params[:target_dom_id] || "report_#{uuid}" %>
+   <h4> <%=  report.options[:title_web].to_s %> </h4>
 <div class="query_report" id="<%= @target_dom_id %>">
+    
   <div class="query_report_header">
     <% if report.has_filter? %>
       <div class="query_report_search_form" style="<%= report.has_filter? ? '' : 'display: none;' %>">
