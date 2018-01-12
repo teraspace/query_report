@@ -42,7 +42,8 @@
       #Solo cuando el index es igual al ultimo indice del subgrupo se agrega el sub-total
       #p '++++++++++++++++++++++++++++++++++++++++++ before_value ++++++++++++++++++++++++++++++'
        #p before_value
-      if before_value!= nil and before_value[:index_t] == index
+       #p report.methods
+      if report.has_subtotal? and before_value!= nil and before_value[:index_t] == index
               %>
 
               <% report.column_subtotal_with_colspan(rowspan_value).each do |total_with_colspan| %>
