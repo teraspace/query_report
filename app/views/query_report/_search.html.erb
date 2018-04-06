@@ -1,11 +1,10 @@
+
 <% params_for_url = params.clone
    params_for_url.delete(:q)
-   params_for_url.delete(:custom_search)
-%>
+   params_for_url.delete(:custom_search) %>
+
 <%= query_report_search_form(report) do |f| %>
-    <%#= 
-       # hash_to_hidden_fields params_for_url
-    %>
+    <%= hash_to_hidden_fields params_for_url %>
     <% report.filters.each do |filter| %>
         <% filter.comparators.each do |comparator| %>
             <%= query_report_render_filter(filter, comparator) %>
@@ -16,11 +15,5 @@
     <%= hidden_field_tag :subject %>
     <%= hidden_field_tag :message %>
     <%= hidden_field_tag :target_dom_id, @target_dom_id %>
-    <%= hidden_field_tag :access_token, @access_token %>
-
-
-    <%= submit_tag t('query_report.labels.search'), 
-        :class => QueryReport.config.search_button_class, 
-        :onclick => "$('#{@target_dom_id} #send_as_email').val(0);" 
-    %>
+    <%= submit_tag t('query_report.labels.search'), :class => QueryReport.config.search_button_class, :onclick => "$('#{@target_dom_id} #send_as_email').val(0);" %>
 <% end %>
