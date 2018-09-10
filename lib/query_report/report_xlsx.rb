@@ -103,10 +103,11 @@ module QueryReport
 					sheet1.row(j + header_rows).set_format(0, merge_format)
 				end
 				
-				sheet1.merge_cells(index_f + header_rows, 0, index_t + header_rows, 0)
+				
 
 
 				if before_value!= nil and before_value[:index_t] == index
+					sheet1.merge_cells(index_f + header_rows, 0, index_t + header_rows, 0)
 					row_values = Array.new
 					header_rows = header_rows +1
 					@report.column_subtotal_with_colspan(rowspan_value).each do |total_with_colspan|      
