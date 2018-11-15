@@ -1,3 +1,15 @@
+Forked by [Carlos Patiño] and published on Bitbucket for Virgina software startup.
+
+New features over original Ashrafuzzman:
+
+1. This fork make query_reports compatible with Ruby-on-rails 5
+2. Excel exporting button
+3. Subtotals rows
+4. Setup format data on totals (for example: "n days", "gals" and others.
+5. Show and hide titles, good for embebed the view on iframes.
+
+
+
 [Query report](http://ashrafuzzaman.github.io/query_report/) By [Ashrafuzzaman](http://ashrafuzzaman.github.io).
 
 [![Build Status](https://api.travis-ci.org/ashrafuzzaman/query_report.png?branch=master)](http://travis-ci.org/ashrafuzzaman/query_report)
@@ -91,7 +103,7 @@ end
 ```
 
 ## License
-MIT License. Copyright Â© 2014 [Ashrafuzzaman](http://ashrafuzzaman.github.io). See MIT-LICENSE for further details.
+MIT License. Copyright © 2014 [Ashrafuzzaman](http://ashrafuzzaman.github.io). See MIT-LICENSE for further details.
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/ashrafuzzaman/query_report/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
