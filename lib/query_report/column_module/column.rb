@@ -38,7 +38,7 @@ module QueryReport
       def name
         @name
       end   
-      def visible?
+      def visible? 
         if @options[:visible]==true ||  @options[:visible]==false
           if @options[:visible] == true
             return true
