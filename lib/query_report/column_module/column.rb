@@ -39,7 +39,16 @@ module QueryReport
         @name
       end   
       def visible?
-        !(@options[:visible].present? && @options[:visible] != false)
+        if @options[:visible]==true ||  @options[:visible]==false
+          if @options[:visible] == true
+            return true
+          end
+          if @options[:visible] == false
+            return false
+          end
+        else          
+          return true
+        end
       end
       
       def sort_link_attribute

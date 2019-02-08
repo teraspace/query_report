@@ -19,7 +19,7 @@ module QueryReport
             row: {odd_bg_color: "DDDDDD", even_bg_color: "FFFFFF"},
             header: {bg_color: 'AAAAAA', font_size: 8}
         },
-        chart: { height: 160, width: 200 }
+        chart: { height: 640, width: 640 }
     }
     config.date_format     = "%d/%m/%Y"
     config.datetime_format = "%d/%m/%Y %H:%M:%S"
