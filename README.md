@@ -1,4 +1,4 @@
-Forked by [Carlos Patiño] and published on Bitbucket for Virgina software startup.
+Forked by [Carlos PatiÃ±o] and published on Bitbucket for Virgina software startup.
 
 New features over original Ashrafuzzman:
 
@@ -8,15 +8,6 @@ New features over original Ashrafuzzman:
 4. Setup format data on totals (for example: "n days", "gals" and others.
 5. Show and hide titles, good for embebed the view on iframes.
 
-
-
-[Query report](http://ashrafuzzaman.github.io/query_report/) By [Ashrafuzzaman](http://ashrafuzzaman.github.io).
-
-[![Build Status](https://api.travis-ci.org/ashrafuzzaman/query_report.png?branch=master)](http://travis-ci.org/ashrafuzzaman/query_report)
-[![Gem Version](https://badge.fury.io/rb/query_report.png)](http://badge.fury.io/rb/query_report)
-[![Code Climate](https://codeclimate.com/github/ashrafuzzaman/query_report.png)](https://codeclimate.com/github/ashrafuzzaman/query_report)
-[![Code coverage](https://codeclimate.com/github/ashrafuzzaman/query_report/coverage.png)](https://codeclimate.com/github/ashrafuzzaman/query_report)
-[![Dependencies](https://gemnasium.com/ashrafuzzaman/query_report.png)](https://gemnasium.com/ashrafuzzaman/query_report)
 
 ###Write the action with a simple DSL and get a report with PDF and CSV export, gorgeous charts, out of box filters, with I18n support, etc...  
 
@@ -103,7 +94,7 @@ end
 ```
 
 ## License
-MIT License. Copyright © 2014 [Ashrafuzzaman](http://ashrafuzzaman.github.io). See MIT-LICENSE for further details.
+MIT License. Copyright ï¿½ 2014 [Ashrafuzzaman](http://ashrafuzzaman.github.io). See MIT-LICENSE for further details.
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/ashrafuzzaman/query_report/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
