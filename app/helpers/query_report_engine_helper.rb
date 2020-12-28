@@ -32,7 +32,7 @@ module QueryReportEngineHelper
   end
 
   def export_report_url_with_format(format)
-    url_for(params.merge(format: format))
+    url_for(request.params.merge({arbitrary_argument:'value', format: format}))
   end
 
   def hash_to_hidden_fields(hash)
